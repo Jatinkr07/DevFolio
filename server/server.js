@@ -9,8 +9,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(
   cors({
-    origin:
-      "https://66b8cb5779ffcb5fd3ae6c6f--kaleidoscopic-biscotti-579f34.netlify.app",
+    origin: "https://jatin-devfolio.netlify.app",
   })
 );
 app.use(express.json());
