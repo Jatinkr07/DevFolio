@@ -12,7 +12,9 @@ const PORT = process.env.PORT || 3000;
 app.use(
   cors({
     origin:
-      "https://66b8bb5ca5564d4d4c267658--ornate-klepon-c1ce5d.netlify.app/",
+      "https://66b8bb5ca5564d4d4c267658--ornate-klepon-c1ce5d.netlify.app",
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization",
   })
 );
 app.use(express.json());
