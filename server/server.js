@@ -1,5 +1,3 @@
-// server.js
-
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
@@ -11,10 +9,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(
   cors({
-    origin:
-      "https://66b8bb5ca5564d4d4c267658--ornate-klepon-c1ce5d.netlify.app",
-    methods: "GET,POST,PUT,DELETE,OPTIONS",
-    allowedHeaders: "Content-Type,Authorization",
+    origin: "http://localhost:5173",
   })
 );
 app.use(express.json());
