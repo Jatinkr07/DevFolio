@@ -22,7 +22,7 @@ const Contact = () => {
 
     try {
       // POST request to backend
-      await axios.post("http://localhost:3000/send-email", {
+      await axios.post("https://devfolio-apiv1.onrender.com/send-email", {
         name,
         email,
         message,
