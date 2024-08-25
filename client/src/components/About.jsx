@@ -18,7 +18,6 @@ const MotionBox = motion(Box);
 
 const AboutMe = () => {
   const [isVisible, setIsVisible] = useState(true);
-  const bgColor = useColorModeValue("gray.100", "gray.900");
   const textColor = useColorModeValue("gray.900", "gray.100");
   const buttonColorScheme = useColorModeValue("blue", "cyan");
 
@@ -27,37 +26,54 @@ const AboutMe = () => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      p={8}
-      bg={bgColor}
+      px={{ base: 4, sm: 6, md: 8 }} // Responsive padding
+      py={{ base: 6, sm: 8, md: 10 }} // Responsive padding
       color={textColor}
-      textAlign="center"
-      width="100%"
+      textAlign="center" // Center text
       minHeight="100vh"
       display="flex"
       alignItems="center"
       justifyContent="center"
+      flexDirection="column"
+      width="100%" // Full width
+      maxW="container.xl" // Maximum width for larger screens
+      overflow="hidden" // Prevent overflow
     >
       <Box
-        width="100%"
-        maxW="container.lg"
-        p={6}
-        borderRadius="lg"
-        bg={useColorModeValue("white", "gray.800")}
-        boxShadow="lg"
-        position="relative"
+        width="100%" // Full width
+        maxW="container.lg" // Maximum width for medium screens
+        px={{ base: 4, sm: 6, md: 8 }} // Responsive padding
+        mx="auto" // Center the Box horizontally
+        textAlign="center" // Ensure text is centered
       >
-        <Heading as="h1" size="2xl" mb={4}>
+        <Heading
+          as="h1"
+          size={useBreakpointValue({ base: "xl", sm: "2xl", md: "3xl" })} // Responsive font size
+          mb={4}
+        >
           Hey there! 👋 I'm Jatin Kumar
         </Heading>
-        <Text fontSize={{ base: "md", md: "lg" }} mb={6}>
+        <Text
+          fontSize={{ base: "sm", sm: "md", md: "lg" }}
+          mb={6}
+          overflowWrap="break-word" // Handle text overflow
+        >
           Welcome to My World of Code! I'm a dedicated Software Development
           Engineer with a passion for turning ideas into interactive web
           experiences. Currently, I'm pursuing a B.Tech in Computer Science at
           Echelon Institute of Technology, with my graduation set for May 2025.
         </Text>
-        <Text fontSize={{ base: "md", md: "lg" }} mb={6}>
-          <Heading as="h1" size="2xl" mb={4}>
-            What Sparks My Interest🚀
+        <Text
+          fontSize={{ base: "sm", sm: "md", md: "lg" }}
+          mb={6}
+          overflowWrap="break-word" // Handle text overflow
+        >
+          <Heading
+            as="h2"
+            size={useBreakpointValue({ base: "lg", sm: "xl", md: "2xl" })}
+            mb={4}
+          >
+            What Sparks My Interest 🚀
           </Heading>
           I thrive on building full-stack web applications that don’t just
           function but wow users. My coding journey has equipped me with the
@@ -66,7 +82,7 @@ const AboutMe = () => {
           Express.js, and MongoDB.
         </Text>
         <Stack
-          direction={useBreakpointValue({ base: "column", md: "row" })}
+          direction={useBreakpointValue({ base: "column", md: "row" })} // Stack direction
           spacing={4}
           justify="center"
           mb={6}
@@ -102,16 +118,15 @@ const AboutMe = () => {
             GitHub
           </Button>
         </Stack>
-        <Text fontSize={{ base: "md", md: "lg" }} mb={6}>
+        <Text
+          fontSize={{ base: "sm", sm: "md", md: "lg" }}
+          mb={6}
+          overflowWrap="break-word" // Handle text overflow
+        >
           Thanks for stopping by—let's build something amazing together! ✨
         </Text>
         <Fade in={isVisible}>
-          <Box
-            position="relative"
-            bottom={4}
-            left="50%"
-            transform="translateX(-50%)"
-          >
+          <Box>
             <Button
               onClick={() => setIsVisible(!isVisible)}
               colorScheme="teal"
@@ -122,7 +137,11 @@ const AboutMe = () => {
           </Box>
         </Fade>
         <Collapse in={isVisible}>
-          <Text mt={4} fontSize={{ base: "sm", md: "md" }}>
+          <Text
+            mt={4}
+            fontSize={{ base: "sm", sm: "md", md: "lg" }}
+            overflowWrap="break-word"
+          >
             Here’s a bit more about my work and projects. Feel free to explore
             and reach out if you have any questions!
           </Text>

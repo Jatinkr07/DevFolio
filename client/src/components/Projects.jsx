@@ -8,6 +8,7 @@ import {
   Tooltip,
   Link,
   Image,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { FaGithub, FaLinkedin, FaNode } from "react-icons/fa";
 import {
@@ -71,18 +72,34 @@ const projects = [
 ];
 
 const Projects = () => {
+  const gridTemplateColumns = useBreakpointValue({
+    base: "repeat(1, 1fr)",
+    sm: "repeat(2, 1fr)",
+    md: "repeat(3, 1fr)",
+  });
+
   return (
-    <Box id="projects" p={10} bg="gray.100" _dark={{ bg: "gray.900" }}>
-      <Text fontSize="4xl" fontWeight="bold" textAlign="center" mb={10}>
+    <Box id="projects" p={5} bg="gray.100" _dark={{ bg: "gray.900" }}>
+      <Text
+        fontSize={{ base: "3xl", md: "4xl" }}
+        fontWeight="bold"
+        textAlign="center"
+        mb={8}
+      >
         Projects
       </Text>
-      <Flex wrap="wrap" justify="center" gap={8}>
+      <Flex
+        wrap="wrap"
+        justify="center"
+        gap={8}
+        gridTemplateColumns={gridTemplateColumns}
+      >
         {projects.map((project, index) => (
           <Box
             key={index}
             bg="white"
             _dark={{ bg: "gray.800" }}
-            p={6}
+            p={4}
             borderRadius="md"
             shadow="md"
             maxW="sm"
@@ -98,14 +115,16 @@ const Projects = () => {
               borderRadius="md"
               mb={4}
               objectFit="cover"
-              width="full"
-              height="200px"
+              width="100%"
+              height="auto"
               fallbackSrc="https://via.placeholder.com/400x300?text=No+Image"
             />
-            <Text fontSize="2xl" fontWeight="bold" mb={4}>
+            <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" mb={3}>
               {project.title}
             </Text>
-            <Text mb={4}>{project.description}</Text>
+            <Text mb={4} fontSize={{ base: "sm", md: "md" }}>
+              {project.description}
+            </Text>
             <HStack justify="center" spacing={4} mb={4}>
               {project.techStack.map((TechIcon, i) => (
                 <Tooltip label={TechIcon.displayName} key={i}>

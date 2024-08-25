@@ -99,7 +99,10 @@ const Home = () => {
             <a href="mailto:jatinkumar07911@gmail.com">Hire Me</a>
           </Button>
           <Button colorScheme="blue" size="lg">
-            <a href="https://jade-bunni-75.tiiny.site" download>
+            <a
+              href="https://storage.googleapis.com/resume-hosting/66cabecc1619c.pdf"
+              download
+            >
               Resume
             </a>
           </Button>
