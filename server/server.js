@@ -9,7 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-const allowedOrigins = ["http://localhost:3001"];
+const allowedOrigins = [
+  "http://localhost:3001",
+  "https://devfolio-bx8j.onrender.com",
+];
 
 app.use(
   cors({
