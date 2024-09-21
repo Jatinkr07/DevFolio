@@ -9,7 +9,6 @@ import {
   Textarea,
   Button,
   useToast,
-  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -29,10 +28,9 @@ const Contact = memo(() => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, message } = formData;
 
     // Basic validation
-    if (!name || !email || !message) {
+    if (!formData.name || !formData.email || !formData.message) {
       toast({
         title: "Validation Error",
         description: "Please fill in all fields.",
@@ -43,15 +41,17 @@ const Contact = memo(() => {
       return;
     }
 
+    // Prevent rapid submissions
+    if (loading) return;
+
     setLoading(true);
     try {
-      // POST request to backend
+      console.log("Sending form data:", formData); // Debugging log
       await axios.post(
         "https://devfolio-apiv1.onrender.com/send-email",
         formData
       );
 
-      // Success toast notification
       toast({
         title: "Message Sent",
         description: "Your message has been sent successfully.",
@@ -60,15 +60,14 @@ const Contact = memo(() => {
         isClosable: true,
       });
 
-      // Clear form fields after submission
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      // Error toast notification
+      console.error("Error sending message:", error); // More detailed error log
+      const errorMsg =
+        error.response?.data?.error || "An error occurred. Please try again.";
       toast({
         title: "Message Failed",
-        description: `There was a problem sending your message: ${
-          error.response?.data?.error || error.message
-        }`,
+        description: errorMsg,
         status: "error",
         duration: 3000,
         isClosable: true,

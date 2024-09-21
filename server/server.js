@@ -1,25 +1,38 @@
-const express = require("express");
-const nodemailer = require("nodemailer");
-const cors = require("cors");
-require("dotenv").config();
+import express, { json } from "express";
+import { createTransport } from "nodemailer";
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+const allowedOrigins = [
+  "https://jatinkumar-devfoliov1.onrender.com",
+  "http://localhost:3001",
+];
+
 app.use(
   cors({
-    origin: "https://jatinkumar-devfoliov1.onrender.com",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, origin); // Allow the origin
+      } else {
+        callback(new Error("Not allowed by CORS")); // Reject the origin
+      }
+    },
   })
 );
-app.use(express.json());
+app.use(json());
 
 // Email sending route
 app.post("/send-email", async (req, res) => {
   const { name, email, message } = req.body;
 
   // Create a Nodemailer transporter
-  let transporter = nodemailer.createTransport({
+  let transporter = createTransport({
     service: "gmail",
     auth: {
       user: process.env.EMAIL_USER,
