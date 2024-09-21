@@ -45,20 +45,21 @@ const Skills = () => {
   const textColor = useColorModeValue("gray.800", "gray.200");
 
   return (
-    <Box id="skills" className="h-auto" p={10} ml={8} mr={8} bg={bgColor}>
+    <Box id="skills" p={10} bg={bgColor}>
       <Text
         fontSize="3xl"
         fontWeight="bold"
-        mb={6}
+        mb={8}
         color={textColor}
         textAlign="center"
       >
         My Skills
       </Text>
       <Grid
-        templateColumns="repeat(auto-fit, minmax(120px, 1fr))"
-        gap={6}
-        textAlign="center"
+        templateColumns="repeat(auto-fit, minmax(140px, 1fr))" // Adjusted minmax for better responsiveness
+        gap={8} // Increased gap for better spacing
+        justifyItems="center" // Ensures that items are centered in each grid cell
+        alignItems="center" // Vertically center the grid items
       >
         {skills.map((skill) => (
           <Center
@@ -67,24 +68,26 @@ const Skills = () => {
             borderRadius="md"
             shadow="md"
             bg={cardBgColor}
-            textAlign="center"
             transition="transform 0.3s"
             _hover={{
               bg: useColorModeValue("gray.200", "gray.900"),
               transform: "scale(1.05)",
             }}
+            width="100%" // Ensures full width for each grid cell
+            maxW="160px" // Limits the maximum width of each card
           >
             <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
+              textAlign="center"
             >
               <Image
                 src={skill.icon}
                 alt={skill.name}
-                boxSize="60px" // Adjusted size for better visibility
-                mb={2}
+                boxSize="60px" // Maintains consistent icon size
+                mb={4} // Increased margin for better spacing
               />
               <Text fontSize="lg" color={textColor}>
                 {skill.name}

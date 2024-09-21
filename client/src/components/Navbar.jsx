@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useRef } from "react";
+/* eslint-disable react/display-name */
+import React from "react";
 import {
   Box,
   Flex,
@@ -9,54 +9,55 @@ import {
   useDisclosure,
   Stack,
   Button,
+  Text,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { Link as ScrollLink } from "react-scroll"; // Import react-scroll
+import { motion } from "framer-motion";
 
-const Navbar = () => {
+// Memoized component for optimization
+const MotionIconButton = React.memo(motion(IconButton));
+
+const Navbar = React.memo(() => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const bgColor = colorMode === "light" ? "gray.100" : "gray.900";
+  const activeLinkColor = colorMode === "light" ? "blue.600" : "cyan.400";
 
   return (
     <Box
       position="fixed"
       width="full"
       p={4}
-      bg={colorMode === "light" ? "gray.100" : "gray.900"}
+      bg={bgColor}
       boxShadow="md"
       zIndex={1000}
       transition="background-color 0.3s ease"
     >
       <Flex align="center" justify="space-between">
-        <Box fontSize="2xl" fontWeight="bold">
+        <Text fontSize="2xl" fontWeight="bold">
           Jatin Kumar
-        </Box>
-        <HStack spacing={4} display={{ base: "none", md: "flex" }}>
-          <ScrollLink to="home" smooth={true} duration={500} offset={-70}>
-            <Button variant="link" fontSize="lg">
-              Home
-            </Button>
-          </ScrollLink>
-          <ScrollLink to="about" smooth={true} duration={500} offset={-70}>
-            <Button variant="link" fontSize="lg">
-              About
-            </Button>
-          </ScrollLink>
-          <ScrollLink to="projects" smooth={true} duration={500} offset={-70}>
-            <Button variant="link" fontSize="lg">
-              Projects
-            </Button>
-          </ScrollLink>
-          <ScrollLink to="skills" smooth={true} duration={500} offset={-70}>
-            <Button variant="link" fontSize="lg">
-              Skills
-            </Button>
-          </ScrollLink>
-          <ScrollLink to="contact" smooth={true} duration={500} offset={-70}>
-            <Button variant="link" fontSize="lg">
-              Contact
-            </Button>
-          </ScrollLink>
+        </Text>
+        <HStack spacing={8} display={{ base: "none", md: "flex" }}>
+          {["home", "about", "projects", "skills", "contact"].map((section) => (
+            <ScrollLink
+              key={section}
+              to={section}
+              smooth={true}
+              duration={500}
+              offset={-70}
+            >
+              <Button
+                variant="link"
+                fontSize="lg"
+                _hover={{ color: activeLinkColor }}
+                _activeLink={{ color: activeLinkColor }}
+              >
+                {section.charAt(0).toUpperCase() + section.slice(1)}
+              </Button>
+            </ScrollLink>
+          ))}
           <Button
             aria-label="Toggle dark mode"
             onClick={toggleColorMode}
@@ -66,11 +67,13 @@ const Navbar = () => {
             {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
           </Button>
         </HStack>
-        <IconButton
+        <MotionIconButton
           aria-label="Open menu"
           icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
           display={{ base: "block", md: "none" }}
           onClick={isOpen ? onClose : onOpen}
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 300 }}
         />
       </Flex>
       {isOpen && (
@@ -80,61 +83,20 @@ const Navbar = () => {
           display={{ base: "flex", md: "none" }}
           textAlign="center"
         >
-          <ScrollLink
-            to="home"
-            smooth={true}
-            duration={500}
-            offset={-70}
-            onClick={onClose}
-          >
-            <Button variant="link" fontSize="lg">
-              Home
-            </Button>
-          </ScrollLink>
-          <ScrollLink
-            to="about"
-            smooth={true}
-            duration={500}
-            offset={-70}
-            onClick={onClose}
-          >
-            <Button variant="link" fontSize="lg">
-              About
-            </Button>
-          </ScrollLink>
-          <ScrollLink
-            to="projects"
-            smooth={true}
-            duration={500}
-            offset={-70}
-            onClick={onClose}
-          >
-            <Button variant="link" fontSize="lg">
-              Projects
-            </Button>
-          </ScrollLink>
-          <ScrollLink
-            to="skills"
-            smooth={true}
-            duration={500}
-            offset={-70}
-            onClick={onClose}
-          >
-            <Button variant="link" fontSize="lg">
-              Skills
-            </Button>
-          </ScrollLink>
-          <ScrollLink
-            to="contact"
-            smooth={true}
-            duration={500}
-            offset={-70}
-            onClick={onClose}
-          >
-            <Button variant="link" fontSize="lg">
-              Contact
-            </Button>
-          </ScrollLink>
+          {["home", "about", "projects", "skills", "contact"].map((section) => (
+            <ScrollLink
+              key={section}
+              to={section}
+              smooth={true}
+              duration={500}
+              offset={-70}
+              onClick={onClose}
+            >
+              <Button variant="link" fontSize="lg">
+                {section.charAt(0).toUpperCase() + section.slice(1)}
+              </Button>
+            </ScrollLink>
+          ))}
           <Button
             aria-label="Toggle dark mode"
             onClick={toggleColorMode}
@@ -147,6 +109,6 @@ const Navbar = () => {
       )}
     </Box>
   );
-};
+});
 
 export default Navbar;

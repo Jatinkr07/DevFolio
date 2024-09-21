@@ -1,5 +1,6 @@
+/* eslint-disable react/display-name */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   Box,
   FormControl,
@@ -8,25 +9,47 @@ import {
   Textarea,
   Button,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
 
-const Contact = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+const Contact = memo(() => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { name, email, message } = formData;
 
+    // Basic validation
+    if (!name || !email || !message) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all fields.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setLoading(true);
     try {
       // POST request to backend
-      await axios.post("https://devfolio-apiv1.onrender.com/send-email", {
-        name,
-        email,
-        message,
-      });
+      await axios.post(
+        "https://devfolio-apiv1.onrender.com/send-email",
+        formData
+      );
 
       // Success toast notification
       toast({
@@ -38,9 +61,7 @@ const Contact = () => {
       });
 
       // Clear form fields after submission
-      setName("");
-      setEmail("");
-      setMessage("");
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       // Error toast notification
       toast({
@@ -52,6 +73,8 @@ const Contact = () => {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,9 +85,9 @@ const Contact = () => {
           <FormLabel>Name</FormLabel>
           <Input
             type="text"
-            name="name" // Matches backend expectation
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             placeholder="Your Name"
           />
         </FormControl>
@@ -72,28 +95,28 @@ const Contact = () => {
           <FormLabel>Email</FormLabel>
           <Input
             type="email"
-            name="email" // Matches backend expectation
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder="Your Email"
           />
         </FormControl>
         <FormControl id="message" mb={4} isRequired>
           <FormLabel>Message</FormLabel>
           <Textarea
-            name="message" // Matches backend expectation
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
             placeholder="Your Message"
             rows={6}
           />
         </FormControl>
-        <Button type="submit" colorScheme="teal" size="lg">
+        <Button type="submit" colorScheme="teal" size="lg" isLoading={loading}>
           Send Message
         </Button>
       </form>
     </Box>
   );
-};
+});
 
 export default Contact;

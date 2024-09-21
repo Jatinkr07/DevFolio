@@ -1,53 +1,42 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, memo, lazy, Suspense } from "react";
 import {
   Box,
   Text,
   Button,
   Image,
   useBreakpointValue,
-  useColorMode,
   useColorModeValue,
   Flex,
 } from "@chakra-ui/react";
 import profileImage from "../assets/profile.jpg";
-import Projects from "./Projects";
-import Skills from "./Skills";
-import About from "./About";
-import Contact from "./Contact";
 
-const Home = () => {
-  const textSize = useBreakpointValue({ base: "xl", md: "2xl", lg: "4xl" });
-  const { colorMode } = useColorMode();
-  const textColor = useColorModeValue("gray.800", "gray.100");
-  const bgColor = useColorModeValue("gray.50", "gray.800");
-  const spanColor = useColorModeValue("green.700", "green.400");
-  const headColor = useColorModeValue("blue.500", "blue.400");
+const Projects = lazy(() => import("./Projects"));
+const Skills = lazy(() => import("./Skills"));
+const About = lazy(() => import("./About"));
+const Contact = lazy(() => import("./Contact"));
 
+const useTypingEffect = (words, speed, skipDelay) => {
   const [displayedText, setDisplayedText] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
   const [offset, setOffset] = useState(0);
   const [forwards, setForwards] = useState(true);
   const [skipCount, setSkipCount] = useState(0);
 
-  const words = ["Software Developer", "MERN Stack Developer", "Programmer"];
-
-  const speed = 70; // Typing speed in milliseconds
-  const skipDelay = 15; // Number of iterations before switching direction
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (forwards) {
         if (offset >= words[wordIndex].length) {
-          setSkipCount(skipCount + 1);
+          setSkipCount((prev) => prev + 1);
           if (skipCount === skipDelay) {
             setForwards(false);
             setSkipCount(0);
           }
         } else {
-          setOffset(offset + 1);
+          setOffset((prev) => prev + 1);
         }
       } else {
         if (offset === 0) {
@@ -55,17 +44,32 @@ const Home = () => {
           setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
           setOffset(0);
         } else {
-          setOffset(offset - 1);
+          setOffset((prev) => prev - 1);
         }
       }
       setDisplayedText(words[wordIndex].substring(0, offset));
     }, speed);
 
     return () => clearInterval(interval);
-  }, [offset, forwards, skipCount, wordIndex, speed, skipDelay]);
+  }, [offset, forwards, skipCount, wordIndex]);
+
+  return displayedText;
+};
+
+const Home = memo(() => {
+  const words = ["Software Developer", "MERN Stack Developer", "Programmer"];
+  const displayedText = useTypingEffect(words, 70, 15);
+
+  const styles = {
+    textSize: useBreakpointValue({ base: "xl", md: "2xl", lg: "4xl" }),
+    textColor: useColorModeValue("gray.800", "gray.100"),
+    bgColor: useColorModeValue("gray.50", "gray.800"),
+    spanColor: useColorModeValue("green.700", "green.400"),
+    headColor: useColorModeValue("blue.500", "blue.400"),
+  };
 
   return (
-    <Box minH="100vh" p={10} bg={bgColor}>
+    <Box minH="100vh" p={10} bg={styles.bgColor}>
       {/* Home Section */}
       <Flex
         id="home"
@@ -82,15 +86,25 @@ const Home = () => {
           mt={20}
           position="relative"
         >
-          <Text fontSize={textSize} fontWeight="bold" mb={4} color={textColor}>
-            <Text className="head" color={headColor}>
+          <Text
+            fontSize={styles.textSize}
+            fontWeight="bold"
+            mb={4}
+            color={styles.textColor}
+          >
+            <Text className="head" color={styles.headColor}>
               {displayedText}
               <span className="console-underscore">|</span>
             </Text>
           </Text>
-          <Text fontSize="2xl" mb={4} color={textColor}>
+          <Text fontSize="2xl" mb={4} color={styles.textColor}>
             Hi, I'm Jatin Kumar. I'm a{" "}
-            <Box as="span" color={spanColor} fontSize="2xl" fontWeight="bold">
+            <Box
+              as="span"
+              color={styles.spanColor}
+              fontSize="2xl"
+              fontWeight="bold"
+            >
               Software Development Engineer
             </Box>{" "}
             passionate about creating innovative web experiences.
@@ -123,46 +137,49 @@ const Home = () => {
             boxSize="300px"
             objectFit="cover"
             boxShadow="xl"
+            loading="lazy"
           />
         </Box>
       </Flex>
 
-      {/* About Section */}
-      <Box
-        id="about"
-        p={10}
-        mt={28}
-        bg={useColorModeValue("white", "gray.700")}
+      {/* Sections */}
+      <Suspense
+        fallback={
+          <Box p={10} textAlign="center">
+            Loading...
+          </Box>
+        }
       >
-        <About />
-      </Box>
-
-      {/* Projects Section */}
-      <Box
-        id="projects"
-        p={10}
-        mt={28}
-        bg={useColorModeValue("white", "gray.700")}
-      >
-        <Projects />
-      </Box>
-
-      {/* Skills Section */}
-      <Box id="skills" p={10} bg={useColorModeValue("white", "gray.700")}>
-        <Skills />
-      </Box>
-
-      {/* Contact Section */}
-      <Box
-        id="contact"
-        p={10}
-        mt={28}
-        bg={useColorModeValue("white", "gray.700")}
-      >
-        <Contact />
-      </Box>
+        <Box
+          id="about"
+          p={10}
+          mt={28}
+          bg={useColorModeValue("white", "gray.700")}
+        >
+          <About />
+        </Box>
+        <Box
+          id="projects"
+          p={10}
+          mt={28}
+          bg={useColorModeValue("white", "gray.700")}
+        >
+          <Projects />
+        </Box>
+        <Box id="skills" p={10} bg={useColorModeValue("white", "gray.700")}>
+          <Skills />
+        </Box>
+        <Box
+          id="contact"
+          p={10}
+          mt={28}
+          bg={useColorModeValue("white", "gray.700")}
+        >
+          <Contact />
+        </Box>
+      </Suspense>
     </Box>
   );
-};
+});
 
 export default Home;

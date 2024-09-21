@@ -2,13 +2,11 @@
 import { extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
-// Define custom configurations
 const config = {
-  initialColorMode: "light", // Set the initial color mode to 'light' or 'dark'
-  useSystemColorMode: false, // Set to true to use the system's color mode
+  initialColorMode: "light",
+  useSystemColorMode: false,
 };
 
-// Define custom styles
 const styles = {
   global: (props) => ({
     body: {
@@ -18,7 +16,6 @@ const styles = {
   }),
 };
 
-// Define custom colors if needed
 const colors = {
   brand: {
     50: "#e9f5ff",
@@ -26,7 +23,7 @@ const colors = {
     200: "#99c2ff",
     300: "#66a1ff",
     400: "#3380ff",
-    500: "#0060e6", // Primary brand color
+    500: "#0060e6",
     600: "#004bb4",
     700: "#003682",
     800: "#002050",
@@ -44,7 +41,6 @@ const theme = extendTheme({
     body: "Poppins, sans-serif",
   },
   components: {
-    // Customize Chakra UI components here if needed
     Button: {
       baseStyle: {
         fontWeight: "bold",

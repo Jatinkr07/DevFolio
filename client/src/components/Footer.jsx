@@ -1,6 +1,7 @@
+/* eslint-disable react/display-name */
 /* eslint-disable no-unused-vars */
 // Footer.jsx
-import React from "react";
+import React, { memo } from "react";
 import {
   Box,
   Text,
@@ -12,10 +13,9 @@ import {
 import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
 import { EmailIcon } from "@chakra-ui/icons";
 
-const Footer = () => {
+const Footer = memo(() => {
   const bgColor = useColorModeValue("gray.100", "gray.900");
   const textColor = useColorModeValue("gray.800", "gray.200");
-  const iconColor = useColorModeValue("gray.600", "gray.300");
 
   return (
     <Box
@@ -34,19 +34,17 @@ const Footer = () => {
         mx="auto"
         px={6}
       >
-        {/* Centered Copyright Text */}
         <Text textAlign="center">
           © {new Date().getFullYear()} Jatin Kumar. All rights reserved.
         </Text>
 
-        {/* Centered Contact Section */}
         <Stack direction="row" spacing={6} justify="center">
-          <Link href="mailto:your-email@gmail.com">
+          <Link href="mailto:your-email@gmail.com" isExternal>
             <IconButton
               icon={<EmailIcon />}
               aria-label="Email"
-              colorScheme="teal"
               variant="outline"
+              colorScheme="teal"
               _hover={{ bg: "teal.400", color: "white" }}
             />
           </Link>
@@ -54,8 +52,8 @@ const Footer = () => {
             <IconButton
               icon={<FaLinkedin />}
               aria-label="LinkedIn"
-              colorScheme="teal"
               variant="outline"
+              colorScheme="teal"
               _hover={{ bg: "teal.400", color: "white" }}
             />
           </Link>
@@ -63,8 +61,8 @@ const Footer = () => {
             <IconButton
               icon={<FaGithub />}
               aria-label="GitHub"
-              colorScheme="teal"
               variant="outline"
+              colorScheme="teal"
               _hover={{ bg: "teal.400", color: "white" }}
             />
           </Link>
@@ -72,8 +70,8 @@ const Footer = () => {
             <IconButton
               icon={<FaInstagram />}
               aria-label="Instagram"
-              colorScheme="teal"
               variant="outline"
+              colorScheme="teal"
               _hover={{ bg: "teal.400", color: "white" }}
             />
           </Link>
@@ -81,6 +79,6 @@ const Footer = () => {
       </Stack>
     </Box>
   );
-};
+});
 
 export default Footer;
