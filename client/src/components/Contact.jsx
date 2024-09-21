@@ -47,10 +47,7 @@ const Contact = memo(() => {
     setLoading(true);
     try {
       console.log("Sending form data:", formData); // Debugging log
-      await axios.post(
-        "https://devfolio-apiv1.onrender.com/send-email",
-        formData
-      );
+      await axios.post("http://localhost:3000/send-email", formData);
 
       toast({
         title: "Message Sent",
